@@ -22,7 +22,7 @@ stretch_mode = 1
 [node name="Player" parent="." instance=ExtResource("1_0v5xl")]
 position = Vector2(294, 960)
 
-[node name="EnemyTimer" type="Timer" parent="."]
-autostart = true
+[node name="Mothership" type="Timer" parent="."]
+one_shot = true
 
-[connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]
+[connection signal="timeout" from="Mothership" to="." method="_on_mothership_timeout"]

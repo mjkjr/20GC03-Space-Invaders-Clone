@@ -20,8 +20,12 @@ hframes = 4
 position = Vector2(33, 24)
 shape = SubResource("CircleShape2D_tqw0y")
 
+[node name="Move" type="Timer" parent="."]
+autostart = true
+
 [node name="Shoot" type="Timer" parent="."]
 one_shot = true
 
 [connection signal="body_entered" from="." to="." method="_on_hit"]
+[connection signal="timeout" from="Move" to="." method="_on_move_timeout"]
 [connection signal="timeout" from="Shoot" to="." method="_on_shoot_timeout"]
