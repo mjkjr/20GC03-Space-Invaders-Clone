@@ -16,6 +16,9 @@ https://mjkjr.itch.io/space-invaders-clone
 ## 👋 Acknowledgments
 
 - Engine: [Godot](https://godotengine.org/)
+- Background Music & SFX: [JDSherbert](https://jdsherbert.itch.io/terms-and-conditions)
+- Additional Sound Effects: [omzombie](https://omzombie.itch.io/)
+- Additional Sound Effects: [vycksounds](https://vyck21.itch.io/)
 - Space Background: [Polovinkin (@vectorpixelstar)](https://vectorpixelstar.itch.io/)
 - Spaceships: [Fearless Design](https://fearless-design.itch.io/)
 - Projectiles & Impact Effects: [bdragon1727](https://bdragon1727.itch.io/)

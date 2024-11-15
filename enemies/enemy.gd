@@ -5,6 +5,9 @@ signal destroyed
 enum Direction { LEFT, RIGHT }
 
 const PROJECTILE = preload("res://enemies/projectile.tscn")
+const EXPLOSION1 = preload("res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - Explosion (Mid - 1).wav")
+const EXPLOSION2 = preload("res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - Explosion (Mid - 2).wav")
+
 
 var movement_direction: Direction = Direction.RIGHT
 
@@ -13,8 +16,10 @@ var exploding: bool = false
 
 func _ready() -> void:
 	# randomize the shooting timer
-	$Shoot.wait_time = randf_range(1, 120)
-	$Shoot.start()
+	$Timers/Shoot.wait_time = randf_range(1, 120)
+	$Timers/Shoot.start()
+	# randomize destruction sound
+	$Audio/Destroyed.stream = [EXPLOSION1, EXPLOSION2][randi_range(0,1)]
 
 
 func set_type(which: int) -> void:
@@ -47,18 +52,19 @@ func _on_shoot_timeout() -> void:
 	projectile.position.x = global_position.x + 33
 	projectile.position.y = global_position.y + 21
 	add_sibling(projectile)
-	$Shoot.wait_time = randf_range(1, 120)
-	$Shoot.start()
+	$Audio/Shoot.play()
+	$Timers/Shoot.wait_time = randf_range(1, 120)
+	$Timers/Shoot.start()
 
 
 func _on_hit(body: Node2D) -> void:
 	if body.get_groups().has("projectiles"):
-		print("ENEMY SHIP DESTROYED!  TODO: add SOUND effect!")
 		destroyed.emit()
 		$CollisionShape2D.set_deferred("disabled", true)
 		$Ship.visible = false
-		$Destroyed.visible = true
-		$Destroyed.play()
+		$Animations/Destroyed.visible = true
+		$Animations/Destroyed.play()
+		$Audio/Destroyed.play()
 		exploding = true
 		body.queue_free()
 

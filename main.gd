@@ -1,7 +1,23 @@
 extends Node
 
+## A Space Invaders Clone
+
+# TODO: Health Meter
+# TODO: Score display
+# TODO: Main menu
+# TODO: Pause screen
+# TODO: Game Over screen
+# TODO: UI Sound Effects
+# TODO: Bunkers
+
+enum State { PLAYING, PAUSED }
+
 const ENEMY = preload("res://enemies/enemy.tscn")
 const MOTHERSHIP = preload("res://enemies/mothership.tscn")
+const MOTHERSHIP_SPAWN_INTERVAL_MIN = 10
+const MOTHERSHIP_SPAWN_INTERVAL_MAX = 30
+
+var state: State = State.PLAYING
 
 var score: int = 0
 
@@ -16,8 +32,9 @@ func _ready() -> void:
 			new_enemy.position.x = new_enemy.get_node("Ship").get_rect().size.x
 			new_enemy.position.y = 2 * new_enemy.get_node("Ship").get_rect().size.y
 			new_enemy.destroyed.connect(_on_enemy_destroyed)
-	$Mothership.wait_time = randf_range(0, 1)
+	$Mothership.wait_time = randf_range(MOTHERSHIP_SPAWN_INTERVAL_MIN, MOTHERSHIP_SPAWN_INTERVAL_MAX)
 	$Mothership.start()
+	$Audio/Music.play()
 
 
 func _on_enemy_destroyed() -> void:
@@ -36,5 +53,5 @@ func _on_mothership_timeout() -> void:
 func _on_mothership_destroyed() -> void:
 	score += 500
 	print("Score: %s" % score)
-	$Mothership.wait_time = randf_range(30, 90)
+	$Mothership.wait_time = randf_range(MOTHERSHIP_SPAWN_INTERVAL_MIN, MOTHERSHIP_SPAWN_INTERVAL_MAX)
 	$Mothership.start()

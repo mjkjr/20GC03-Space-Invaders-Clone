@@ -2,11 +2,13 @@ extends Area2D
 
 const PROJECTILE = preload("res://player/projectile.tscn")
 const SPEED: float = 700.0
+const COOLDOWN: float = 0.5
 
 var viewport: Rect2
 
 var health: int = 100
 var exploding: bool = false
+var cooldown: float = 0
 
 
 func _ready() -> void:
@@ -19,12 +21,17 @@ func _process(delta: float) -> void:
 		position.x -= SPEED * delta
 	elif Input.is_action_pressed("Move Right"):
 		position.x += SPEED * delta
-	
-	if Input.is_action_just_pressed("Shoot"):
-		var projectile = PROJECTILE.instantiate()
-		projectile.position.x = global_position.x
-		projectile.position.y = global_position.y - 30
-		add_sibling(projectile)
+
+	if cooldown > 0:
+		cooldown -= delta
+	else:
+		if Input.is_action_just_pressed("Shoot"):
+			cooldown = COOLDOWN
+			var projectile = PROJECTILE.instantiate()
+			projectile.position.x = global_position.x
+			projectile.position.y = global_position.y - 30
+			add_sibling(projectile)
+			$Audio/Shoot.play()
 	
 	# restrict to viewport:
 	if position.x < viewport.position.x + ($Ship.get_rect().size.x / 2):
@@ -41,29 +48,31 @@ func _on_hit(body: Node2D) -> void:
 	if body.get_groups().has("projectiles"):
 		health -= body.get_damage()
 		if health <= 0:
-			print("DIED!  TODO: Add SOUND effect")
 			$CollisionShape2D.set_deferred("disabled", true)
 			$Ship.visible = false
-			$Destroyed.visible = true
-			$Destroyed.play()
+			$Animations/Destroyed.visible = true
+			$Animations/Destroyed.play()
+			$Audio/Destroyed.play()
 			exploding = true
 		else:
-			print("DAMAGE TAKEN (%s health remaining)!  TODO: add SOUND effect" % health)
+			print("DAMAGE TAKEN (%s health remaining)!" % health)
 			if body.get_groups().has("mothership"):
-				$Hit2.visible = true
-				$Hit2.play()
+				$Animations/ElectricalDamage.visible = true
+				$Animations/ElectricalDamage.play()
+				$Audio/ElectricalDamage.play()
 			else:
-				$Hit.global_position.x = body.position.x
-				$Hit.visible = true
-				$Hit.play()
+				$Animations/KineticDamage.global_position.x = body.position.x
+				$Animations/KineticDamage.visible = true
+				$Animations/KineticDamage.play()
+				$Audio/KineticDamage.play()
 
 
-func _on_hit_animation_finished() -> void:
-	$Hit.visible = false
+func _on_kinetic_damage_animation_finished() -> void:
+	$Animations/KineticDamage.visible = false
 
 
-func _on_hit_2_animation_finished() -> void:
-	$Hit2.visible = false
+func _on_electrical_damage_animation_finished() -> void:
+	$Animations/ElectricalDamage.visible = false
 
 
 func _on_destroyed_animation_finished() -> void:

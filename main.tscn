@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dfpb6k3ssig7u"]
+[gd_scene load_steps=5 format=3 uid="uid://dfpb6k3ssig7u"]
 
 [ext_resource type="PackedScene" uid="uid://caxq8jpbb6npf" path="res://player/player.tscn" id="1_0v5xl"]
 [ext_resource type="Script" path="res://main.gd" id="1_6cwsn"]
 [ext_resource type="Texture2D" uid="uid://cxfq8h8vbn7f4" path="res://assets/Space_Stars2.png" id="1_wpwr7"]
+[ext_resource type="AudioStream" uid="uid://d4j8qhd617x6j" path="res://assets/audio/JDSherbert - Minigame Music Pack - Corrupted Circuitry.mp3" id="4_ps8y2"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_6cwsn")
@@ -17,12 +18,20 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_wpwr7")
 stretch_mode = 1
 
-[node name="UI" type="CanvasLayer" parent="."]
-
 [node name="Player" parent="." instance=ExtResource("1_0v5xl")]
 position = Vector2(294, 960)
 
 [node name="Mothership" type="Timer" parent="."]
 one_shot = true
+
+[node name="UI" type="Node" parent="."]
+
+[node name="PlayScreen" type="CanvasLayer" parent="UI"]
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_ps8y2")
+volume_db = -6.0
 
 [connection signal="timeout" from="Mothership" to="." method="_on_mothership_timeout"]

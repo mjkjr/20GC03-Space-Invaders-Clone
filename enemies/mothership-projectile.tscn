@@ -1,43 +1,9 @@
-[gd_scene load_steps=28 format=3 uid="uid://dk4gbl517x26i"]
+[gd_scene load_steps=29 format=3 uid="uid://dk4gbl517x26i"]
 
+[ext_resource type="Script" path="res://enemies/mothership_projectile.gd" id="1_8vkux"]
 [ext_resource type="Texture2D" uid="uid://bod1jgtxholxu" path="res://assets/enemies/mothership-projectile.png" id="1_tsfie"]
 [ext_resource type="Texture2D" uid="uid://csjmbfjh4r26p" path="res://assets/enemies/mothership-projectile-destroyed.png" id="2_ouylg"]
-
-[sub_resource type="GDScript" id="GDScript_8d1t4"]
-script/source = "extends RigidBody2D
-
-const SPEED: float = 250.0
-const DAMAGE: int = 15
-
-var exploding: bool = false
-
-
-func _physics_process(delta: float) -> void:
-	if exploding: return
-	
-	move_and_collide(Vector2(0, SPEED * delta))
-	if position.y > get_viewport_rect().size.y:
-		queue_free()
-
-
-func get_damage() -> int:
-	return DAMAGE
-
-
-func _on_hit(body: Node) -> void:
-	if body.get_groups().has(\"projectiles\"):
-		print(\"MOTHERSHIP PROJECTILE DESTROYED! TODO: add SOUND effect\")
-		body.queue_free()
-		$CollisionShape2D.set_deferred(\"disabled\", true)
-		$Projectile.visible = false
-		$Destroyed.visible = true
-		$Destroyed.play()
-		exploding = true
-
-
-func _on_destroyed_animation_finished() -> void:
-	queue_free()
-"
+[ext_resource type="AudioStream" uid="uid://cgtm5y64o5d3m" path="res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - EMP (2).wav" id="4_ly1f8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p0fao"]
 atlas = ExtResource("1_tsfie")
@@ -211,7 +177,7 @@ collision_mask = 3
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
-script = SubResource("GDScript_8d1t4")
+script = ExtResource("1_8vkux")
 
 [node name="Projectile" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_kcd5a")
@@ -230,6 +196,11 @@ scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_6jx6o")
 frame = 10
 frame_progress = 1.0
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Destroyed" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_ly1f8")
 
 [connection signal="body_entered" from="." to="." method="_on_hit"]
 [connection signal="animation_finished" from="Destroyed" to="." method="_on_destroyed_animation_finished"]

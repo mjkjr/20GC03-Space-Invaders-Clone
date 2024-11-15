@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://bus8du5mnubm8"]
+[gd_scene load_steps=16 format=3 uid="uid://bus8du5mnubm8"]
 
 [ext_resource type="Texture2D" uid="uid://cbpjxecxjebw5" path="res://assets/enemies/enemies.png" id="1_1i7ww"]
 [ext_resource type="Script" path="res://enemies/enemy.gd" id="1_86jk3"]
 [ext_resource type="Texture2D" uid="uid://bt3t0hrd3mmxn" path="res://assets/enemies/enemy-destroyed.png" id="3_e5v1g"]
+[ext_resource type="AudioStream" uid="uid://cagc12i8as3vt" path="res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - Rocket (1).wav" id="4_4dna8"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tqw0y"]
 radius = 24.0
@@ -71,6 +72,8 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="AudioStream" id="AudioStream_dvxub"]
+
 [node name="Enemy" type="Area2D" groups=["enemies"]]
 collision_layer = 4
 collision_mask = 3
@@ -86,13 +89,9 @@ visible = false
 position = Vector2(33, 24)
 shape = SubResource("CircleShape2D_tqw0y")
 
-[node name="Move" type="Timer" parent="."]
-autostart = true
+[node name="Animations" type="Node2D" parent="."]
 
-[node name="Shoot" type="Timer" parent="."]
-one_shot = true
-
-[node name="Destroyed" type="AnimatedSprite2D" parent="."]
+[node name="Destroyed" type="AnimatedSprite2D" parent="Animations"]
 visible = false
 position = Vector2(32, 32)
 scale = Vector2(2, 2)
@@ -100,7 +99,25 @@ sprite_frames = SubResource("SpriteFrames_aspm5")
 frame = 7
 frame_progress = 1.0
 
+[node name="Timers" type="Node" parent="."]
+
+[node name="Move" type="Timer" parent="Timers"]
+autostart = true
+
+[node name="Shoot" type="Timer" parent="Timers"]
+one_shot = true
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Destroyed" type="AudioStreamPlayer" parent="Audio"]
+stream = SubResource("AudioStream_dvxub")
+volume_db = -3.0
+
+[node name="Shoot" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_4dna8")
+volume_db = -5.0
+
 [connection signal="body_entered" from="." to="." method="_on_hit"]
-[connection signal="timeout" from="Move" to="." method="_on_move_timeout"]
-[connection signal="timeout" from="Shoot" to="." method="_on_shoot_timeout"]
-[connection signal="animation_finished" from="Destroyed" to="." method="_on_destroyed_animation_finished"]
+[connection signal="animation_finished" from="Animations/Destroyed" to="." method="_on_destroyed_animation_finished"]
+[connection signal="timeout" from="Timers/Move" to="." method="_on_move_timeout"]
+[connection signal="timeout" from="Timers/Shoot" to="." method="_on_shoot_timeout"]

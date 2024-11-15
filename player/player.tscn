@@ -1,10 +1,14 @@
-[gd_scene load_steps=48 format=3 uid="uid://caxq8jpbb6npf"]
+[gd_scene load_steps=52 format=3 uid="uid://caxq8jpbb6npf"]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_65lqw"]
 [ext_resource type="Texture2D" uid="uid://dkkvyr6vpuqkm" path="res://assets/player/player.png" id="1_qvd4p"]
 [ext_resource type="Texture2D" uid="uid://blyimri3mudxt" path="res://assets/player/hit-damage.png" id="3_widw8"]
 [ext_resource type="Texture2D" uid="uid://ceoa5exkvhcbv" path="res://assets/player/destroyed.png" id="4_bfkvp"]
 [ext_resource type="Texture2D" uid="uid://l723kouyoit3" path="res://assets/player/hit-damage-2.png" id="4_hslwh"]
+[ext_resource type="AudioStream" uid="uid://p1lvg31o44pp" path="res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - Explosion (Large - 2).wav" id="6_fdlsd"]
+[ext_resource type="AudioStream" uid="uid://cgtm5y64o5d3m" path="res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - EMP (2).wav" id="6_n111x"]
+[ext_resource type="AudioStream" uid="uid://bq13d1xu3ljei" path="res://assets/audio/SFX_HOLOGRAM_ON_SC-FI.wav" id="7_crusb"]
+[ext_resource type="AudioStream" uid="uid://c5mwfx6lnypiv" path="res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - Flashbang (2).wav" id="7_s6wpb"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_khqsj"]
 radius = 21.5
@@ -313,14 +317,16 @@ position = Vector2(0, 15.5)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_khqsj")
 
-[node name="Hit" type="AnimatedSprite2D" parent="."]
+[node name="Animations" type="Node2D" parent="."]
+
+[node name="KineticDamage" type="AnimatedSprite2D" parent="Animations"]
 visible = false
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_towtp")
 frame = 10
 frame_progress = 1.0
 
-[node name="Hit2" type="AnimatedSprite2D" parent="."]
+[node name="ElectricalDamage" type="AnimatedSprite2D" parent="Animations"]
 visible = false
 position = Vector2(0, 2)
 scale = Vector2(1.5, 1.5)
@@ -328,14 +334,30 @@ sprite_frames = SubResource("SpriteFrames_esvms")
 frame = 16
 frame_progress = 1.0
 
-[node name="Destroyed" type="AnimatedSprite2D" parent="."]
+[node name="Destroyed" type="AnimatedSprite2D" parent="Animations"]
 visible = false
 scale = Vector2(2.25, 2.25)
 sprite_frames = SubResource("SpriteFrames_12nqw")
 frame = 9
 frame_progress = 1.0
 
+[node name="Audio" type="Node" parent="."]
+
+[node name="Shoot" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("6_n111x")
+volume_db = -5.0
+
+[node name="KineticDamage" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("7_s6wpb")
+
+[node name="ElectricalDamage" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("7_crusb")
+volume_db = 1.0
+
+[node name="Destroyed" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("6_fdlsd")
+
 [connection signal="body_entered" from="." to="." method="_on_hit"]
-[connection signal="animation_finished" from="Hit" to="." method="_on_hit_animation_finished"]
-[connection signal="animation_finished" from="Hit2" to="." method="_on_hit_2_animation_finished"]
-[connection signal="animation_finished" from="Destroyed" to="." method="_on_destroyed_animation_finished"]
+[connection signal="animation_finished" from="Animations/KineticDamage" to="." method="_on_kinetic_damage_animation_finished"]
+[connection signal="animation_finished" from="Animations/ElectricalDamage" to="." method="_on_electrical_damage_animation_finished"]
+[connection signal="animation_finished" from="Animations/Destroyed" to="." method="_on_destroyed_animation_finished"]

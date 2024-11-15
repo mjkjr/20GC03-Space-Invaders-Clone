@@ -5,12 +5,14 @@ signal destroyed
 enum Direction { LEFT, RIGHT }
 
 const PROJECTILE = preload("res://enemies/mothership-projectile.tscn")
-const PROJECTILE_LOAD: int = 6
+const PROJECTILE_DELAY_MIN: int = 1
+const PROJECTILE_DELAY_MAX: int = 5
+const PROJECTILE_COUNT: int = 3
 
 var movement_direction: Direction = Direction.RIGHT
 
 # how many projectiles have been shot in a single go so far
-var projectile_load: int = 0
+var projectiles_shot: int = 0
 
 var health: int = 100
 var exploding: bool = false
@@ -18,8 +20,9 @@ var exploding: bool = false
 
 func _ready() -> void:
 	# randomize the shooting timer
-	$Shoot.wait_time = randf_range(1, 5)
-	$Shoot.start()
+	$Timers/Shoot.wait_time = randf_range(PROJECTILE_DELAY_MIN, PROJECTILE_DELAY_MAX)
+	$Timers/Shoot.start()
+	$Audio/Ambient.play()
 
 
 func _on_move_timeout() -> void:
@@ -42,35 +45,37 @@ func _on_shoot_timeout() -> void:
 	projectile.position.x = global_position.x + 48
 	projectile.position.y = global_position.y + 24
 	add_sibling(projectile)
-	if projectile_load <= PROJECTILE_LOAD:
-		projectile_load += 1
-		$Shoot.wait_time = 0.25
+	$Audio/Shoot.play()
+	projectiles_shot += 1
+	if projectiles_shot < PROJECTILE_COUNT:
+		$Timers/Shoot.wait_time = 0.25
 	else:
-		projectile_load = 0
-		$Shoot.wait_time = randf_range(1, 5)
-	$Shoot.start()
+		projectiles_shot = 0
+		$Timers/Shoot.wait_time = randf_range(PROJECTILE_DELAY_MIN, PROJECTILE_DELAY_MAX)
+	$Timers/Shoot.start()
 
 
 func _on_hit(body: Node2D) -> void:
 	if body.get_groups().has("projectiles"):
 		health -= body.get_damage()
 		body.queue_free()
-		print("MOTHERSHIP HIT (Health: %s)!" % health)
+		#print("MOTHERSHIP HIT (Health: %s)!" % health)
 		if health <= 0:
-			print("MOTHERSHIP DESTROYED! TODO: add sound effect!")
 			destroyed.emit()
 			$CollisionShape2D.set_deferred("disabled", true)
 			$Ship.visible = false
-			$Destroyed.visible = true
-			$Destroyed.play()
+			$Animations/Destroyed.visible = true
+			$Animations/Destroyed.play()
+			$Audio/Destroyed.play()
 			exploding = true
 		else:
-			$Hit.visible = true
-			$Hit.play()
+			$Animations/Hit.visible = true
+			$Animations/Hit.play()
+			$Audio/Damage.play()
 
 
 func _on_hit_animation_finished() -> void:
-	$Hit.visible = false
+	$Animations/Hit.visible = false
 
 
 func _on_destroyed_animation_finished() -> void:

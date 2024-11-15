@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cagc12i8as3vt"
+path="res://.godot/imported/JDSherbert - Pixel Explosions SFX Pack - Rocket (1).wav-764b27bcb98d6ad5815cf6da41f4746e.sample"
+
+[deps]
+
+source_file="res://assets/audio/JDSherbert - Pixel Explosions SFX Pack - Rocket (1).wav"
+dest_files=["res://.godot/imported/JDSherbert - Pixel Explosions SFX Pack - Rocket (1).wav-764b27bcb98d6ad5815cf6da41f4746e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=true
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
