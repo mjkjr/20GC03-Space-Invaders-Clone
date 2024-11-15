@@ -1,22 +1,88 @@
-[gd_scene load_steps=4 format=3 uid="uid://bus8du5mnubm8"]
+[gd_scene load_steps=14 format=3 uid="uid://bus8du5mnubm8"]
 
-[ext_resource type="Texture2D" uid="uid://cbpjxecxjebw5" path="res://assets/enemies.png" id="1_1i7ww"]
+[ext_resource type="Texture2D" uid="uid://cbpjxecxjebw5" path="res://assets/enemies/enemies.png" id="1_1i7ww"]
 [ext_resource type="Script" path="res://enemies/enemy.gd" id="1_86jk3"]
+[ext_resource type="Texture2D" uid="uid://bt3t0hrd3mmxn" path="res://assets/enemies/enemy-destroyed.png" id="3_e5v1g"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tqw0y"]
 radius = 24.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sqopt"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jnx8m"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m25yc"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhlfe"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdrob"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_40gom"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jwblc"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbldp"]
+atlas = ExtResource("3_e5v1g")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_aspm5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sqopt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jnx8m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m25yc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhlfe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdrob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_40gom")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jwblc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbldp")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
 
 [node name="Enemy" type="Area2D" groups=["enemies"]]
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_86jk3")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Ship" type="Sprite2D" parent="."]
 position = Vector2(33, 28)
 texture = ExtResource("1_1i7ww")
 hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(33, 24)
 shape = SubResource("CircleShape2D_tqw0y")
 
@@ -26,6 +92,15 @@ autostart = true
 [node name="Shoot" type="Timer" parent="."]
 one_shot = true
 
+[node name="Destroyed" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(32, 32)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_aspm5")
+frame = 7
+frame_progress = 1.0
+
 [connection signal="body_entered" from="." to="." method="_on_hit"]
 [connection signal="timeout" from="Move" to="." method="_on_move_timeout"]
 [connection signal="timeout" from="Shoot" to="." method="_on_shoot_timeout"]
+[connection signal="animation_finished" from="Destroyed" to="." method="_on_destroyed_animation_finished"]

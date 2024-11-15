@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fyvhgercoyw0"
-path="res://.godot/imported/projectile-red.png-e77f582ebf94511f1b92f771d5c00f78.ctex"
+uid="uid://blyimri3mudxt"
+path="res://.godot/imported/hit-damage.png-f07792766682334ae44c7f685b7a6387.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/projectile-red.png"
-dest_files=["res://.godot/imported/projectile-red.png-e77f582ebf94511f1b92f771d5c00f78.ctex"]
+source_file="res://assets/player/hit-damage.png"
+dest_files=["res://.godot/imported/hit-damage.png-f07792766682334ae44c7f685b7a6387.ctex"]
 
 [params]
 

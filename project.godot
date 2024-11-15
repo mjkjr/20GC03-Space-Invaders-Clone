@@ -27,6 +27,7 @@ window/stretch/mode="viewport"
 
 enemies=""
 projectiles=""
+mothership=""
 
 [input]
 

@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 const SPEED: float = 1000.0
+const DAMAGE: int = 25
 
 
 func _physics_process(delta: float) -> void:
@@ -9,9 +10,5 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 
-func _on_hit(body: Node) -> void:
-	if body.get_groups().has("projectiles"):
-		print("hit by projectile!")
-		print("TODO: add visual and sound effect")
-		body.queue_free()
-		queue_free()
+func get_damage() -> int:
+	return DAMAGE

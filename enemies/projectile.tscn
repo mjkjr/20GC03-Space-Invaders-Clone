@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://bl211kdelyalq"]
+[gd_scene load_steps=33 format=3 uid="uid://bl211kdelyalq"]
 
-[ext_resource type="Texture2D" uid="uid://fyvhgercoyw0" path="res://assets/projectile-red.png" id="1_hu4gd"]
+[ext_resource type="Texture2D" uid="uid://fyvhgercoyw0" path="res://assets/enemies/enemy-projectile.png" id="1_hu4gd"]
 [ext_resource type="Script" path="res://enemies/projectile.gd" id="2_hjo57"]
+[ext_resource type="Texture2D" uid="uid://d3j6hnes0uthm" path="res://assets/enemies/enemy-projectile-destroyed.png" id="3_6rurj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8nbmr"]
 atlas = ExtResource("1_hu4gd")
@@ -112,8 +113,99 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_66m2b"]
 size = Vector2(5.99999, 50)
 
-[node name="Projectile" type="RigidBody2D" groups=["projectiles"]]
-rotation = 1.5708
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rkms"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_753js"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i1wwv"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62v03"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3jua"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3jocn"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pxio"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mqso2"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_63lhr"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(512, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mj0x4"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(576, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ppl0"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(640, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbkam"]
+atlas = ExtResource("3_6rurj")
+region = Rect2(704, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ikrs8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rkms")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_753js")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i1wwv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_62v03")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3jua")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3jocn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6pxio")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mqso2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_63lhr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mj0x4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ppl0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tbkam")
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[node name="EnemyProjectile" type="RigidBody2D" groups=["projectiles"]]
 collision_layer = 8
 collision_mask = 3
 gravity_scale = 0.0
@@ -121,12 +213,24 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("2_hjo57")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Projectile" type="AnimatedSprite2D" parent="."]
+rotation = 1.5708
 sprite_frames = SubResource("SpriteFrames_6gwvw")
 autoplay = "default"
 frame_progress = 0.502962
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(3, 7.19632e-06)
-rotation = 1.5708
+visible = false
+position = Vector2(0, 3.00001)
 shape = SubResource("RectangleShape2D_66m2b")
+
+[node name="Destroyed" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(0, 20)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_ikrs8")
+frame = 11
+frame_progress = 1.0
+
+[connection signal="body_entered" from="." to="." method="_on_hit"]
+[connection signal="animation_finished" from="Destroyed" to="." method="_on_destroyed_animation_finished"]

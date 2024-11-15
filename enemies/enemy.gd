@@ -8,6 +8,8 @@ const PROJECTILE = preload("res://enemies/projectile.tscn")
 
 var movement_direction: Direction = Direction.RIGHT
 
+var exploding: bool = false
+
 
 func _ready() -> void:
 	# randomize the shooting timer
@@ -16,22 +18,24 @@ func _ready() -> void:
 
 
 func set_type(which: int) -> void:
-	$Sprite2D.frame = which
+	$Ship.frame = which
 
 
 func move() -> void:
+	if exploding: return
+	
 	if movement_direction == Direction.LEFT:
-		if position.x == $Sprite2D.get_rect().size.x:
-			position.y += $Sprite2D.get_rect().size.y
+		if position.x == $Ship.get_rect().size.x:
+			position.y += $Ship.get_rect().size.y
 			movement_direction = Direction.RIGHT
 		else:
-			position.x -= $Sprite2D.get_rect().size.x
+			position.x -= $Ship.get_rect().size.x
 	else:
-		if position.x == get_viewport_rect().size.x - ($Sprite2D.get_rect().size.x * 2):
-			position.y += $Sprite2D.get_rect().size.y
+		if position.x == get_viewport_rect().size.x - ($Ship.get_rect().size.x * 2):
+			position.y += $Ship.get_rect().size.y
 			movement_direction = Direction.LEFT
 		else:
-			position.x += $Sprite2D.get_rect().size.x
+			position.x += $Ship.get_rect().size.x
 
 
 func _on_move_timeout() -> void:
@@ -49,7 +53,15 @@ func _on_shoot_timeout() -> void:
 
 func _on_hit(body: Node2D) -> void:
 	if body.get_groups().has("projectiles"):
+		print("ENEMY SHIP DESTROYED!  TODO: add SOUND effect!")
 		destroyed.emit()
-		print("TODO: add explosion and sound effect!")
+		$CollisionShape2D.set_deferred("disabled", true)
+		$Ship.visible = false
+		$Destroyed.visible = true
+		$Destroyed.play()
+		exploding = true
 		body.queue_free()
-		queue_free()
+
+
+func _on_destroyed_animation_finished() -> void:
+	queue_free()

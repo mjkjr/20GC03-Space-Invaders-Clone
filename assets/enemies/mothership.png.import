@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl8kedaiieco4"
-path="res://.godot/imported/projectile-blue.png-fde83b27fe60dbdc4ac54b7b24fa7d0c.ctex"
+uid="uid://milbvcx3daqp"
+path="res://.godot/imported/mothership.png-42991ae76ec5f5651de4c0de276a5d01.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/projectile-blue.png"
-dest_files=["res://.godot/imported/projectile-blue.png-fde83b27fe60dbdc4ac54b7b24fa7d0c.ctex"]
+source_file="res://assets/enemies/mothership.png"
+dest_files=["res://.godot/imported/mothership.png-42991ae76ec5f5651de4c0de276a5d01.ctex"]
 
 [params]
 

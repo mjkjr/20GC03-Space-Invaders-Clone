@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://0vdknbuw0w42"]
 
 [ext_resource type="Script" path="res://player/projectile.gd" id="1_5082x"]
-[ext_resource type="Texture2D" uid="uid://cl8kedaiieco4" path="res://assets/projectile-blue.png" id="2_whxev"]
+[ext_resource type="Texture2D" uid="uid://cl8kedaiieco4" path="res://assets/player/player-projectile.png" id="2_whxev"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ai4ty"]
 atlas = ExtResource("2_whxev")
@@ -135,6 +135,5 @@ autoplay = "default"
 frame_progress = 0.0743136
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_uifik")
-
-[connection signal="body_entered" from="." to="." method="_on_hit"]

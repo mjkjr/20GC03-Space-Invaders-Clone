@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://milbvcx3daqp"
-path="res://.godot/imported/mothership.png-cf78d0dc0a2be6943da8cc1a54ed7a1c.ctex"
+uid="uid://ceoa5exkvhcbv"
+path="res://.godot/imported/destroyed.png-dcbf7c9c47e17ebdc42293c2a65b4c1f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/mothership.png"
-dest_files=["res://.godot/imported/mothership.png-cf78d0dc0a2be6943da8cc1a54ed7a1c.ctex"]
+source_file="res://assets/player/destroyed.png"
+dest_files=["res://.godot/imported/destroyed.png-dcbf7c9c47e17ebdc42293c2a65b4c1f.ctex"]
 
 [params]
 
