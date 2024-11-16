@@ -1,5 +1,8 @@
 extends Area2D
 
+signal damaged
+signal health_changed(health: int)
+
 const PROJECTILE = preload("res://player/projectile.tscn")
 const SPEED: float = 700.0
 const COOLDOWN: float = 0.5
@@ -21,7 +24,13 @@ func _process(delta: float) -> void:
 		position.x -= SPEED * delta
 	elif Input.is_action_pressed("Move Right"):
 		position.x += SPEED * delta
-
+	
+	# restrict to viewport:
+	if position.x < viewport.position.x + $Ship.get_rect().size.x:
+		position.x = viewport.position.x + $Ship.get_rect().size.x
+	elif position.x > viewport.end.x - ($Ship.get_rect().end.x * 2):
+		position.x = viewport.end.x - ($Ship.get_rect().end.x * 2)
+	
 	if cooldown > 0:
 		cooldown -= delta
 	else:
@@ -32,12 +41,6 @@ func _process(delta: float) -> void:
 			projectile.position.y = global_position.y - 30
 			add_sibling(projectile)
 			$Audio/Shoot.play()
-	
-	# restrict to viewport:
-	if position.x < viewport.position.x + ($Ship.get_rect().size.x / 2):
-		position.x = viewport.position.x + ($Ship.get_rect().size.x / 2)
-	elif position.x > viewport.end.x - $Ship.get_rect().end.x:
-		position.x = viewport.end.x - $Ship.get_rect().end.x
 
 
 func _viewport_resized() -> void:
@@ -47,6 +50,8 @@ func _viewport_resized() -> void:
 func _on_hit(body: Node2D) -> void:
 	if body.get_groups().has("projectiles"):
 		health -= body.get_damage()
+		damaged.emit()
+		health_changed.emit(health)
 		if health <= 0:
 			$CollisionShape2D.set_deferred("disabled", true)
 			$Ship.visible = false
@@ -55,7 +60,7 @@ func _on_hit(body: Node2D) -> void:
 			$Audio/Destroyed.play()
 			exploding = true
 		else:
-			print("DAMAGE TAKEN (%s health remaining)!" % health)
+			#print("DAMAGE TAKEN (%s health remaining)!" % health)
 			if body.get_groups().has("mothership"):
 				$Animations/ElectricalDamage.visible = true
 				$Animations/ElectricalDamage.play()

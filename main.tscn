@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://dfpb6k3ssig7u"]
+[gd_scene load_steps=7 format=3 uid="uid://dfpb6k3ssig7u"]
 
 [ext_resource type="PackedScene" uid="uid://caxq8jpbb6npf" path="res://player/player.tscn" id="1_0v5xl"]
 [ext_resource type="Script" path="res://main.gd" id="1_6cwsn"]
 [ext_resource type="Texture2D" uid="uid://cxfq8h8vbn7f4" path="res://assets/Space_Stars2.png" id="1_wpwr7"]
+[ext_resource type="Texture2D" uid="uid://cxghgewfsxxhl" path="res://assets/health-meter.png" id="4_dga0e"]
 [ext_resource type="AudioStream" uid="uid://d4j8qhd617x6j" path="res://assets/audio/JDSherbert - Minigame Music Pack - Corrupted Circuitry.mp3" id="4_ps8y2"]
+
+[sub_resource type="Theme" id="Theme_43qjx"]
+Label/font_sizes/font_size = 20
 
 [node name="Main" type="Node"]
 script = ExtResource("1_6cwsn")
@@ -26,7 +30,52 @@ one_shot = true
 
 [node name="UI" type="Node" parent="."]
 
-[node name="PlayScreen" type="CanvasLayer" parent="UI"]
+[node name="Menu" type="CanvasLayer" parent="UI"]
+
+[node name="Play" type="CanvasLayer" parent="UI"]
+
+[node name="Score" type="GridContainer" parent="UI/Play"]
+offset_left = 18.0
+offset_top = 15.0
+offset_right = 200.0
+offset_bottom = 77.0
+theme = SubResource("Theme_43qjx")
+columns = 2
+
+[node name="Label" type="Label" parent="UI/Play/Score"]
+layout_mode = 2
+text = "Score: "
+
+[node name="Score" type="Label" parent="UI/Play/Score"]
+layout_mode = 2
+text = "0"
+
+[node name="Health" type="Node2D" parent="UI/Play"]
+position = Vector2(506, 30)
+rotation = 1.5708
+
+[node name="Frame" type="Sprite2D" parent="UI/Play/Health"]
+scale = Vector2(3, 3)
+texture = ExtResource("4_dga0e")
+hframes = 9
+frame = 1
+
+[node name="Meter" type="Sprite2D" parent="UI/Play/Health"]
+scale = Vector2(3, 3)
+texture = ExtResource("4_dga0e")
+hframes = 9
+frame = 3
+
+[node name="FlashDamage" type="ColorRect" parent="UI/Play"]
+offset_right = 576.0
+offset_bottom = 1024.0
+color = Color(1, 1, 1, 0)
+
+[node name="Pause" type="CanvasLayer" parent="UI"]
+
+[node name="GameOver" type="CanvasLayer" parent="UI"]
+
+[node name="Credits" type="CanvasLayer" parent="UI"]
 
 [node name="Audio" type="Node" parent="."]
 
