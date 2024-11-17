@@ -357,8 +357,13 @@ volume_db = 1.0
 [node name="Destroyed" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("6_fdlsd")
 
+[node name="ShootCooldown" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_hit"]
 [connection signal="animation_finished" from="Animations/KineticDamage" to="." method="_on_kinetic_damage_animation_finished"]
 [connection signal="animation_finished" from="Animations/ElectricalDamage" to="." method="_on_electrical_damage_animation_finished"]
 [connection signal="animation_finished" from="Animations/Destroyed" to="." method="_on_destroyed_animation_finished"]
+[connection signal="timeout" from="ShootCooldown" to="." method="_on_shoot_cooldown_timeout"]

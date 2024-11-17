@@ -59,7 +59,6 @@ func _on_shoot_timeout() -> void:
 
 func _on_hit(body: Node2D) -> void:
 	if body.get_groups().has("projectiles"):
-		destroyed.emit()
 		$CollisionShape2D.set_deferred("disabled", true)
 		$Ship.visible = false
 		$Animations/Destroyed.visible = true
@@ -71,3 +70,4 @@ func _on_hit(body: Node2D) -> void:
 
 func _on_destroyed_animation_finished() -> void:
 	queue_free()
+	destroyed.emit()

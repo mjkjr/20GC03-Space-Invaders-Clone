@@ -69,7 +69,6 @@ func _on_hit(body: Node2D) -> void:
 		body.queue_free()
 		#print("MOTHERSHIP HIT (Health: %s)!" % health)
 		if health <= 0:
-			destroyed.emit()
 			$CollisionShape2D.set_deferred("disabled", true)
 			$Ship.visible = false
 			$Animations/Destroyed.visible = true
@@ -88,3 +87,4 @@ func _on_hit_animation_finished() -> void:
 
 func _on_destroyed_animation_finished() -> void:
 	queue_free()
+	destroyed.emit()

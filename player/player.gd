@@ -6,13 +6,12 @@ signal destroyed
 const MAX_HEALTH = 5
 const PROJECTILE = preload("res://player/projectile.tscn")
 const SPEED: float = 700.0
-const COOLDOWN: float = 0.5
 
 var viewport: Rect2
 
 var health: int = MAX_HEALTH
 var exploding: bool = false
-var cooldown: float = 0
+var gun_ready: bool = true
 
 
 func _ready() -> void:
@@ -32,16 +31,17 @@ func _process(delta: float) -> void:
 	elif position.x > viewport.end.x - $Ship.get_rect().end.x - 6:
 		position.x = viewport.end.x - $Ship.get_rect().end.x - 6
 	
-	if cooldown > 0:
-		cooldown -= delta
-	else:
-		if Input.is_action_just_pressed("Shoot"):
-			cooldown = COOLDOWN
-			var projectile = PROJECTILE.instantiate()
-			projectile.position.x = global_position.x
-			projectile.position.y = global_position.y - 30
-			add_sibling(projectile)
-			$Audio/Shoot.play()
+	if (
+			Input.is_action_just_pressed("Shoot")
+			and gun_ready
+	):
+		gun_ready = false
+		$ShootCooldown.start()
+		var projectile = PROJECTILE.instantiate()
+		projectile.position.x = global_position.x
+		projectile.position.y = global_position.y - 30
+		add_sibling(projectile)
+		$Audio/Shoot.play()
 
 
 func destroy() -> void:
@@ -64,7 +64,7 @@ func _on_hit(body: Node2D) -> void:
 			destroy()
 		else:
 			#print("DAMAGE TAKEN (%s health remaining)!" % health)
-			if body.get_groups().has("mothership"):
+			if body.get_damage_type() == "Electrical":
 				$Animations/ElectricalDamage.visible = true
 				$Animations/ElectricalDamage.play()
 				$Audio/ElectricalDamage.play()
@@ -92,3 +92,7 @@ func _on_area_entered(area: Area2D) -> void:
 		health = 0
 		damaged.emit(health, MAX_HEALTH)
 		destroy()
+
+
+func _on_shoot_cooldown_timeout() -> void:
+	gun_ready = true

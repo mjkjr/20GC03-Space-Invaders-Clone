@@ -5,6 +5,7 @@ extends Node
 # TODO: Main menu
 # TODO: Pause screen
 # TODO: Game Over screen
+# TODO: Detect win condition (all enemies destroyed)
 # TODO: UI Sound Effects
 # TODO: Difficulty selection (make enemies faster / shoot more often)
 # TODO: Bunkers
@@ -42,6 +43,13 @@ func _ready() -> void:
 
 func game_over() -> void:
 	print("game_over() function called.")
+	$Mothership.stop()
+
+
+func _check_win_condition() -> void:
+	if get_tree().get_nodes_in_group("enemies").is_empty():
+		print("Win condition met!")
+		game_over()
 
 
 func _on_player_damaged(new_health: int, max_health: int) -> void:
@@ -67,11 +75,6 @@ func _on_player_damaged(new_health: int, max_health: int) -> void:
 			$UI/Play/Health/Meter.set_frame(8)
 
 
-func _on_enemy_destroyed() -> void:
-	score += 100
-	$UI/Play/Score/Score.text = str(score)
-
-
 func _on_mothership_timeout() -> void:
 	var mothership = MOTHERSHIP.instantiate()
 	add_child(mothership)
@@ -85,6 +88,17 @@ func _on_mothership_destroyed() -> void:
 	$UI/Play/Score/Score.text = str(score)
 	$Mothership.wait_time = randf_range(MOTHERSHIP_SPAWN_INTERVAL_MIN, MOTHERSHIP_SPAWN_INTERVAL_MAX)
 	$Mothership.start()
+	# wait until the end of the frame before checking win condition
+	if not get_tree().process_frame.is_connected(_check_win_condition):
+		get_tree().process_frame.connect(_check_win_condition, CONNECT_ONE_SHOT)
+
+
+func _on_enemy_destroyed() -> void:
+	score += 100
+	$UI/Play/Score/Score.text = str(score)
+	# wait until the end of the frame before checking win condition
+	if not get_tree().process_frame.is_connected(_check_win_condition):
+		get_tree().process_frame.connect(_check_win_condition, CONNECT_ONE_SHOT)
 
 
 func _on_player_destroyed() -> void:

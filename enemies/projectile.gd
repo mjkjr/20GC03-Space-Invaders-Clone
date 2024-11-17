@@ -18,6 +18,10 @@ func get_damage() -> int:
 	return DAMAGE
 
 
+func get_damage_type() -> String:
+	return "Kinetic"
+
+
 func _on_hit(body: Node) -> void:
 	if body.get_groups().has("projectiles"):
 		body.queue_free()

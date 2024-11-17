@@ -168,7 +168,7 @@ animations = [{
 "speed": 16.0
 }]
 
-[node name="Mothership" type="Area2D"]
+[node name="Mothership" type="Area2D" groups=["enemies"]]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_egxgk")
