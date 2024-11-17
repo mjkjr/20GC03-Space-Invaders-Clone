@@ -102,6 +102,7 @@ frame_progress = 1.0
 [node name="Timers" type="Node" parent="."]
 
 [node name="Move" type="Timer" parent="Timers"]
+wait_time = 0.5
 autostart = true
 
 [node name="Shoot" type="Timer" parent="Timers"]

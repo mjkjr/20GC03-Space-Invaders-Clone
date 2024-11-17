@@ -1,7 +1,7 @@
 extends RigidBody2D
 
 const SPEED: float = 250.0
-const DAMAGE: int = 15
+const DAMAGE: int = 2
 
 var exploding: bool = false
 

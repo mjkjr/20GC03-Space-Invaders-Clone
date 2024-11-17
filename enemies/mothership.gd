@@ -7,22 +7,31 @@ enum Direction { LEFT, RIGHT }
 const PROJECTILE = preload("res://enemies/mothership-projectile.tscn")
 const PROJECTILE_DELAY_MIN: int = 1
 const PROJECTILE_DELAY_MAX: int = 5
-const PROJECTILE_COUNT: int = 3
+const PROJECTILE_COUNT_MIN: int = 3
+const PROJECTILE_COUNT_MAX: int = 6
 
 var movement_direction: Direction = Direction.RIGHT
 
 # how many projectiles have been shot in a single go so far
-var projectiles_shot: int = 0
+var projectile_count: int
+var projectiles_shot: int
 
 var health: int = 100
 var exploding: bool = false
 
 
 func _ready() -> void:
-	# randomize the shooting timer
-	$Timers/Shoot.wait_time = randf_range(PROJECTILE_DELAY_MIN, PROJECTILE_DELAY_MAX)
+	reset_projectiles()
 	$Timers/Shoot.start()
 	$Audio/Ambient.play()
+
+
+func reset_projectiles() -> void:
+		projectiles_shot = 0
+		# randomize the shooting timer
+		$Timers/Shoot.wait_time = randf_range(PROJECTILE_DELAY_MIN, PROJECTILE_DELAY_MAX)
+		# randomize projectile count
+		projectile_count = randi_range(PROJECTILE_COUNT_MIN, PROJECTILE_COUNT_MAX)
 
 
 func _on_move_timeout() -> void:
@@ -47,11 +56,10 @@ func _on_shoot_timeout() -> void:
 	add_sibling(projectile)
 	$Audio/Shoot.play()
 	projectiles_shot += 1
-	if projectiles_shot < PROJECTILE_COUNT:
+	if projectiles_shot < projectile_count:
 		$Timers/Shoot.wait_time = 0.25
 	else:
-		projectiles_shot = 0
-		$Timers/Shoot.wait_time = randf_range(PROJECTILE_DELAY_MIN, PROJECTILE_DELAY_MAX)
+		reset_projectiles()
 	$Timers/Shoot.start()
 
 

@@ -5,8 +5,8 @@ extends Node
 # TODO: Main menu
 # TODO: Pause screen
 # TODO: Game Over screen
-# TODO: Ship to ship collision detection
 # TODO: UI Sound Effects
+# TODO: Difficulty selection (make enemies faster / shoot more often)
 # TODO: Bunkers
 # TODO: Name
 # TODO: Credits screen
@@ -15,8 +15,8 @@ enum State { PLAYING, PAUSED }
 
 const ENEMY = preload("res://enemies/enemy.tscn")
 const MOTHERSHIP = preload("res://enemies/mothership.tscn")
-const MOTHERSHIP_SPAWN_INTERVAL_MIN = 10
-const MOTHERSHIP_SPAWN_INTERVAL_MAX = 30
+const MOTHERSHIP_SPAWN_INTERVAL_MIN = 5
+const MOTHERSHIP_SPAWN_INTERVAL_MAX = 15
 
 var state: State = State.PLAYING
 
@@ -36,29 +36,35 @@ func _ready() -> void:
 	$Mothership.wait_time = randf_range(MOTHERSHIP_SPAWN_INTERVAL_MIN, MOTHERSHIP_SPAWN_INTERVAL_MAX)
 	$Mothership.start()
 	$Audio/Music.play()
-	$Player.health_changed.connect(_on_player_health_changed)
 	$Player.damaged.connect(_on_player_damaged)
+	$Player.destroyed.connect(_on_player_destroyed)
 
 
-func _on_player_damaged() -> void:
+func game_over() -> void:
+	print("game_over() function called.")
+
+
+func _on_player_damaged(new_health: int, max_health: int) -> void:
+	# display a flash across the screen
 	var tween = get_tree().create_tween()
 	tween.tween_property($UI/Play/FlashDamage, "color", Color(1, 1, 1, 0.8), 0.1).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property($UI/Play/FlashDamage, "color", Color(1, 1, 1, 0), 0.1)
-
-
-func _on_player_health_changed(health: int) -> void:
-	if health == 100:
-		$UI/Play/Health/Meter.set_frame(3)
-	elif health >= 80:
-		$UI/Play/Health/Meter.set_frame(4)
-	elif health >= 60:
-		$UI/Play/Health/Meter.set_frame(5)
-	elif health >= 40:
-		$UI/Play/Health/Meter.set_frame(6)
-	elif health >= 20:
-		$UI/Play/Health/Meter.set_frame(7)
-	else:
-		$UI/Play/Health/Meter.set_frame(8)
+	
+	# update health meter
+	var scaled_health: int = (new_health / (max_health / 5))
+	match scaled_health:
+		5:
+			$UI/Play/Health/Meter.set_frame(3)
+		4:
+			$UI/Play/Health/Meter.set_frame(4)
+		3:
+			$UI/Play/Health/Meter.set_frame(5)
+		2:
+			$UI/Play/Health/Meter.set_frame(6)
+		1:
+			$UI/Play/Health/Meter.set_frame(7)
+		_:
+			$UI/Play/Health/Meter.set_frame(8)
 
 
 func _on_enemy_destroyed() -> void:
@@ -79,3 +85,7 @@ func _on_mothership_destroyed() -> void:
 	$UI/Play/Score/Score.text = str(score)
 	$Mothership.wait_time = randf_range(MOTHERSHIP_SPAWN_INTERVAL_MIN, MOTHERSHIP_SPAWN_INTERVAL_MAX)
 	$Mothership.start()
+
+
+func _on_player_destroyed() -> void:
+	game_over()

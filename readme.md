@@ -21,6 +21,6 @@ https://mjkjr.itch.io/space-invaders-clone
 - Additional Sound Effects: [vycksounds](https://vyck21.itch.io/)
 - Space Background: [Polovinkin (@vectorpixelstar)](https://vectorpixelstar.itch.io/)
 - Spaceships: [Fearless Design](https://fearless-design.itch.io/)
-- Projectiles & Impact Effects: [bdragon1727](https://bdragon1727.itch.io/)
+- Health Meter, Projectiles & Impact Effects: [bdragon1727](https://bdragon1727.itch.io/)
 - Special Thanks: [Matthew S](https://20_games_challenge.gitlab.io/)
 

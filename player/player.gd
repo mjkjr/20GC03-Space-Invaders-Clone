@@ -1,15 +1,16 @@
 extends Area2D
 
-signal damaged
-signal health_changed(health: int)
+signal damaged(new_health: int, max_health: int)
+signal destroyed
 
+const MAX_HEALTH = 5
 const PROJECTILE = preload("res://player/projectile.tscn")
 const SPEED: float = 700.0
 const COOLDOWN: float = 0.5
 
 var viewport: Rect2
 
-var health: int = 100
+var health: int = MAX_HEALTH
 var exploding: bool = false
 var cooldown: float = 0
 
@@ -26,10 +27,10 @@ func _process(delta: float) -> void:
 		position.x += SPEED * delta
 	
 	# restrict to viewport:
-	if position.x < viewport.position.x + $Ship.get_rect().size.x:
-		position.x = viewport.position.x + $Ship.get_rect().size.x
-	elif position.x > viewport.end.x - ($Ship.get_rect().end.x * 2):
-		position.x = viewport.end.x - ($Ship.get_rect().end.x * 2)
+	if position.x < viewport.position.x + ($Ship.get_rect().size.x * 0.5) + 6:
+		position.x = viewport.position.x + ($Ship.get_rect().size.x * 0.5) + 6
+	elif position.x > viewport.end.x - $Ship.get_rect().end.x - 6:
+		position.x = viewport.end.x - $Ship.get_rect().end.x - 6
 	
 	if cooldown > 0:
 		cooldown -= delta
@@ -43,6 +44,14 @@ func _process(delta: float) -> void:
 			$Audio/Shoot.play()
 
 
+func destroy() -> void:
+	$CollisionShape2D.set_deferred("disabled", true)
+	$Ship.visible = false
+	$Animations/Destroyed.visible = true
+	$Animations/Destroyed.play()
+	$Audio/Destroyed.play()
+	exploding = true
+
 func _viewport_resized() -> void:
 	viewport = get_viewport_rect()
 
@@ -50,15 +59,9 @@ func _viewport_resized() -> void:
 func _on_hit(body: Node2D) -> void:
 	if body.get_groups().has("projectiles"):
 		health -= body.get_damage()
-		damaged.emit()
-		health_changed.emit(health)
+		damaged.emit(health, MAX_HEALTH)
 		if health <= 0:
-			$CollisionShape2D.set_deferred("disabled", true)
-			$Ship.visible = false
-			$Animations/Destroyed.visible = true
-			$Animations/Destroyed.play()
-			$Audio/Destroyed.play()
-			exploding = true
+			destroy()
 		else:
 			#print("DAMAGE TAKEN (%s health remaining)!" % health)
 			if body.get_groups().has("mothership"):
@@ -81,4 +84,11 @@ func _on_electrical_damage_animation_finished() -> void:
 
 
 func _on_destroyed_animation_finished() -> void:
-	print("TODO: GAME OVER!")
+	destroyed.emit()
+
+
+func _on_area_entered(area: Area2D) -> void:
+	if area.get_groups().has("enemies"):
+		health = 0
+		damaged.emit(health, MAX_HEALTH)
+		destroy()
