@@ -2,10 +2,9 @@ extends Node
 
 ## A Space Invaders Clone
 
-# TODO: Main menu
-# TODO: Pause screen
 # TODO: Game Over screen
-# TODO: Detect win condition (all enemies destroyed)
+# TODO: Pause screen
+# TODO: Main menu
 # TODO: UI Sound Effects
 # TODO: Difficulty selection (make enemies faster / shoot more often)
 # TODO: Bunkers
@@ -43,6 +42,8 @@ func _ready() -> void:
 
 func game_over() -> void:
 	print("game_over() function called.")
+	process_mode = PROCESS_MODE_DISABLED
+	$UI/GameOver.visible = true
 	$Mothership.stop()
 
 

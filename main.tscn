@@ -81,6 +81,28 @@ color = Color(1, 1, 1, 0)
 [node name="Pause" type="CanvasLayer" parent="UI"]
 
 [node name="GameOver" type="CanvasLayer" parent="UI"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="UI/GameOver"]
+custom_minimum_size = Vector2(576, 1024)
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.501961, 0.501961, 0.501961, 0.768627)
+
+[node name="Label" type="Label" parent="UI/GameOver/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.5
+offset_top = -11.5
+offset_right = 48.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "GAME OVER!"
 
 [node name="Credits" type="CanvasLayer" parent="UI"]
 
