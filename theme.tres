@@ -1,0 +1,26 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://ceorlicfg88p8"]
+
+[ext_resource type="FontFile" uid="uid://bmxi8trvitgn6" path="res://assets/fonts/orbitron-medium.otf" id="1_hy56j"]
+[ext_resource type="FontFile" uid="uid://j4mo5wfd3n15" path="res://assets/fonts/heavy_data.ttf" id="1_qw3ms"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjw1g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_afk4y"]
+content_margin_left = 36.0
+content_margin_top = 20.0
+content_margin_right = 36.0
+content_margin_bottom = 30.0
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 12
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 12
+
+[resource]
+Button/fonts/font = ExtResource("1_hy56j")
+HSeparator/constants/separation = 16
+HSeparator/styles/separator = SubResource("StyleBoxEmpty_bjw1g")
+Label/font_sizes/font_size = 20
+Label/fonts/font = ExtResource("1_qw3ms")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_afk4y")
+VBoxContainer/constants/separation = 8

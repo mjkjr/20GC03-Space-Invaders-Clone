@@ -1,38 +1,43 @@
-[gd_scene load_steps=7 format=3 uid="uid://dfpb6k3ssig7u"]
+[gd_scene load_steps=10 format=3 uid="uid://dfpb6k3ssig7u"]
 
-[ext_resource type="PackedScene" uid="uid://caxq8jpbb6npf" path="res://player/player.tscn" id="1_0v5xl"]
 [ext_resource type="Script" path="res://main.gd" id="1_6cwsn"]
 [ext_resource type="Texture2D" uid="uid://cxfq8h8vbn7f4" path="res://assets/Space_Stars2.png" id="1_wpwr7"]
-[ext_resource type="Theme" uid="uid://ceorlicfg88p8" path="res://ui.tres" id="4_6xo2j"]
+[ext_resource type="Theme" uid="uid://ceorlicfg88p8" path="res://theme.tres" id="4_6xo2j"]
 [ext_resource type="Texture2D" uid="uid://cxghgewfsxxhl" path="res://assets/health-meter.png" id="4_dga0e"]
 [ext_resource type="AudioStream" uid="uid://d4j8qhd617x6j" path="res://assets/audio/JDSherbert - Minigame Music Pack - Corrupted Circuitry.mp3" id="4_ps8y2"]
+[ext_resource type="FontFile" uid="uid://bmxi8trvitgn6" path="res://assets/fonts/orbitron-medium.otf" id="5_byh8p"]
+
+[sub_resource type="Theme" id="Theme_3g0rr"]
+Label/font_sizes/font_size = 20
+
+[sub_resource type="Theme" id="Theme_hjpu3"]
+Label/font_sizes/font_size = 20
+
+[sub_resource type="Theme" id="Theme_8ixqa"]
+Label/font_sizes/font_size = 20
 
 [node name="Main" type="Node"]
 script = ExtResource("1_6cwsn")
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Gameplay" type="Node" parent="."]
+
+[node name="Background" type="CanvasLayer" parent="Gameplay"]
 layer = -1
 
-[node name="TextureRect" type="TextureRect" parent="Background"]
+[node name="TextureRect" type="TextureRect" parent="Gameplay/Background"]
 offset_right = 288.0
 offset_bottom = 512.0
 scale = Vector2(2, 2)
 texture = ExtResource("1_wpwr7")
 stretch_mode = 1
 
-[node name="Player" parent="." instance=ExtResource("1_0v5xl")]
-position = Vector2(294, 960)
-
-[node name="Mothership" type="Timer" parent="."]
+[node name="Mothership" type="Timer" parent="Gameplay"]
 one_shot = true
 
-[node name="UI" type="Node" parent="."]
+[node name="UI" type="CanvasLayer" parent="Gameplay"]
+layer = 0
 
-[node name="Menu" type="CanvasLayer" parent="UI"]
-
-[node name="Play" type="CanvasLayer" parent="UI"]
-
-[node name="Score" type="GridContainer" parent="UI/Play"]
+[node name="Score" type="GridContainer" parent="Gameplay/UI"]
 offset_left = 18.0
 offset_top = 15.0
 offset_right = 256.0
@@ -40,71 +45,256 @@ offset_bottom = 48.0
 theme = ExtResource("4_6xo2j")
 columns = 2
 
-[node name="Label" type="Label" parent="UI/Play/Score"]
+[node name="Label" type="Label" parent="Gameplay/UI/Score"]
 layout_mode = 2
 text = "Score: "
 
-[node name="Score" type="Label" parent="UI/Play/Score"]
+[node name="Total" type="Label" parent="Gameplay/UI/Score"]
 layout_mode = 2
 text = "0"
 
-[node name="Health" type="Node2D" parent="UI/Play"]
-position = Vector2(506, 30)
-rotation = 1.5708
+[node name="Health" type="GridContainer" parent="Gameplay/UI"]
+offset_left = 386.0
+offset_top = 14.0
+offset_right = 559.0
+offset_bottom = 42.0
+size_flags_vertical = 4
+columns = 2
 
-[node name="Label" type="Label" parent="UI/Play/Health"]
-offset_left = -11.9996
-offset_top = 126.0
-offset_right = 58.0004
-offset_bottom = 154.0
-rotation = -1.5708
+[node name="Label" type="Label" parent="Gameplay/UI/Health"]
+layout_mode = 2
 theme = ExtResource("4_6xo2j")
-text = "Health:"
+text = "Health: "
 
-[node name="Frame" type="Sprite2D" parent="UI/Play/Health"]
+[node name="Meter" type="Control" parent="Gameplay/UI/Health"]
+layout_mode = 2
+
+[node name="Outer" type="Sprite2D" parent="Gameplay/UI/Health/Meter"]
+position = Vector2(0, -10)
+rotation = 1.5708
 scale = Vector2(3, 3)
 texture = ExtResource("4_dga0e")
+offset = Vector2(8, -16)
 hframes = 9
 frame = 1
 
-[node name="Meter" type="Sprite2D" parent="UI/Play/Health"]
+[node name="Inner" type="Sprite2D" parent="Gameplay/UI/Health/Meter"]
+position = Vector2(0, -10)
+rotation = 1.5708
 scale = Vector2(3, 3)
 texture = ExtResource("4_dga0e")
+offset = Vector2(8, -16)
 hframes = 9
 frame = 3
 
-[node name="FlashDamage" type="ColorRect" parent="UI/Play"]
+[node name="FlashDamage" type="ColorRect" parent="Gameplay/UI"]
 offset_right = 576.0
 offset_bottom = 1024.0
 color = Color(1, 1, 1, 0)
 
-[node name="Pause" type="CanvasLayer" parent="UI"]
+[node name="Menus" type="CanvasLayer" parent="."]
 
-[node name="GameOver" type="CanvasLayer" parent="UI"]
-visible = false
+[node name="Main" type="CanvasLayer" parent="Menus"]
 
-[node name="ColorRect" type="ColorRect" parent="UI/GameOver"]
+[node name="ColorRect" type="ColorRect" parent="Menus/Main"]
 custom_minimum_size = Vector2(576, 1024)
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.501961, 0.501961, 0.501961, 0.768627)
 
-[node name="Label" type="Label" parent="UI/GameOver/ColorRect"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -48.5
-offset_top = -11.5
-offset_right = 48.5
-offset_bottom = 11.5
+[node name="CenterContainer" type="CenterContainer" parent="Menus/Main"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "GAME OVER!"
 
-[node name="Credits" type="CanvasLayer" parent="UI"]
+[node name="PanelContainer" type="PanelContainer" parent="Menus/Main/CenterContainer"]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/Main/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Title" type="Label" parent="Menus/Main/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_3g0rr")
+theme_override_font_sizes/font_size = 48
+text = "Star Defender"
+horizontal_alignment = 1
+
+[node name="Tagline" type="Label" parent="Menus/Main/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+text = "A Space Invaders Clone"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Menus/Main/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Play" type="Button" parent="Menus/Main/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+text = "Play"
+
+[node name="Credits" type="Button" parent="Menus/Main/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+text = "Credits"
+
+[node name="Pause" type="CanvasLayer" parent="Menus"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="Menus/Pause"]
+custom_minimum_size = Vector2(576, 1024)
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.501961, 0.501961, 0.501961, 0.768627)
+
+[node name="CenterContainer" type="CenterContainer" parent="Menus/Pause"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Menus/Pause/CenterContainer"]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/Pause/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Title" type="Label" parent="Menus/Pause/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_hjpu3")
+theme_override_font_sizes/font_size = 48
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Menus/Pause/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Resume" type="Button" parent="Menus/Pause/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Credits" type="Button" parent="Menus/Pause/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Credits"
+
+[node name="GameOver" type="CanvasLayer" parent="Menus"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="Menus/GameOver"]
+custom_minimum_size = Vector2(576, 1024)
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.501961, 0.501961, 0.501961, 0.768627)
+
+[node name="CenterContainer" type="CenterContainer" parent="Menus/GameOver"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Menus/GameOver/CenterContainer"]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/GameOver/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Title" type="Label" parent="Menus/GameOver/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+theme_override_font_sizes/font_size = 48
+text = "GAME OVER!"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Menus/GameOver/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="PlayAgain" type="Button" parent="Menus/GameOver/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play Again"
+
+[node name="Credits" type="Button" parent="Menus/GameOver/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Credits"
+
+[node name="Credits" type="CanvasLayer" parent="Menus"]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="Menus/Credits"]
+custom_minimum_size = Vector2(576, 1024)
+offset_right = 576.0
+offset_bottom = 1024.0
+color = Color(0, 0, 0, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="Menus/Credits"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Menus/Credits/CenterContainer"]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/Credits/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Title" type="Label" parent="Menus/Credits/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_8ixqa")
+theme_override_font_sizes/font_size = 48
+text = "Credits"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Menus/Credits/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Credits" type="Label" parent="Menus/Credits/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+theme_override_constants/line_spacing = 6
+theme_override_fonts/font = ExtResource("5_byh8p")
+theme_override_font_sizes/font_size = 12
+text = "• Design: Michael J. Kozubal Jr. (mjkjr.itch.io)
+• Code: Michael J. Kozubal Jr. (github.com/mjkjr)
+• Engine: Godot (godotengine.org)
+• Space Background: Polovinkin (vectorpixelstar.itch.io)
+• Spaceships: Fearless Design (fearless-design.itch.io)
+• Health Meter, Projectiles, & Impacts: bdragon1727 (bdragon1727.itch.io)
+• Background Music & SFX: JDSherbert (jdsherbert.itch.io)
+• Additional Sound Effects: omzombie (omzombie.itch.io)
+• Additional Sound Effects: vycksounds (vyck21.itch.io)
+• Font (Heavy Data): Vic Fieger (vicfieger.com)
+• Font (Orbitron): Matt McInerney (pixelspread.com)
+• Special Thanks: Matthew S (20_games_challenge.gitlab.io)"
+
+[node name="HSeparator2" type="HSeparator" parent="Menus/Credits/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_6xo2j")
+
+[node name="Dismiss" type="Button" parent="Menus/Credits/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Dismiss"
 
 [node name="Audio" type="Node" parent="."]
 
@@ -112,4 +302,11 @@ text = "GAME OVER!"
 stream = ExtResource("4_ps8y2")
 volume_db = -6.0
 
-[connection signal="timeout" from="Mothership" to="." method="_on_mothership_timeout"]
+[connection signal="timeout" from="Gameplay/Mothership" to="." method="_on_mothership_timeout"]
+[connection signal="pressed" from="Menus/Main/CenterContainer/PanelContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Menus/Main/CenterContainer/PanelContainer/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="Menus/Pause/CenterContainer/PanelContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Menus/Pause/CenterContainer/PanelContainer/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="Menus/GameOver/CenterContainer/PanelContainer/VBoxContainer/PlayAgain" to="." method="_on_play_again_pressed"]
+[connection signal="pressed" from="Menus/GameOver/CenterContainer/PanelContainer/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="Menus/Credits/CenterContainer/PanelContainer/VBoxContainer/Dismiss" to="." method="_on_credits_dismiss_pressed"]

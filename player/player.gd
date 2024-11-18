@@ -85,6 +85,7 @@ func _on_electrical_damage_animation_finished() -> void:
 
 func _on_destroyed_animation_finished() -> void:
 	destroyed.emit()
+	queue_free()
 
 
 func _on_area_entered(area: Area2D) -> void:
