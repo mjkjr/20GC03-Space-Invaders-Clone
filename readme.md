@@ -1,4 +1,4 @@
-# Star Defender
+# 🚀 Star Defender
 A Space Invaders Clone.
 
 My game #3 of the [20 Games Challenge](https://20_games_challenge.gitlab.io/).
