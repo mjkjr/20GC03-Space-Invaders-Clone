@@ -1,6 +1,7 @@
 extends Area2D
 
 signal destroyed
+signal gone
 
 enum Direction { LEFT, RIGHT }
 
@@ -18,6 +19,7 @@ var projectiles_shot: int
 
 var health: int = 100
 var exploding: bool = false
+var leaving: bool = false
 
 
 func _ready() -> void:
@@ -39,12 +41,20 @@ func _on_move_timeout() -> void:
 	
 	if movement_direction == Direction.LEFT:
 		if position.x == 0:
-			movement_direction = Direction.RIGHT
+			if leaving:
+				gone.emit()
+				queue_free()
+			else:
+				movement_direction = Direction.RIGHT
 		else:
 			position.x -= $Ship.get_rect().size.x
 	else:
 		if position.x == get_viewport_rect().size.x - $Ship.get_rect().size.x:
-			movement_direction = Direction.LEFT
+			if leaving:
+				gone.emit()
+				queue_free()
+			else:
+				movement_direction = Direction.LEFT
 		else:
 			position.x += $Ship.get_rect().size.x
 
@@ -88,3 +98,7 @@ func _on_hit_animation_finished() -> void:
 func _on_destroyed_animation_finished() -> void:
 	queue_free()
 	destroyed.emit()
+
+
+func _on_leave_timeout() -> void:
+	leaving = true

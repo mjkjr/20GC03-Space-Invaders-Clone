@@ -3,8 +3,6 @@ extends Node
 ## Star Defender
 ## A Space Invaders Clone
 
-# TODO: Make mothership leave after a while
-# TODO: UI Sound Effects
 # TODO: Difficulty selection (make enemies faster / shoot more often)
 # TODO: Bunkers
 
@@ -21,19 +19,19 @@ var state: State = State.MAIN_MENU
 var score: int = 0
 
 
+func _ready() -> void:
+	$Audio/Music.play()
+
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("Escape"):
 		if $Menus/Credits.visible:
-			$Menus/Credits.visible = false
+			_on_credits_dismiss_pressed()
 		else:
 			if state == State.PLAYING:
-				state = State.PAUSED
-				$Menus/Pause.visible = true
-				_pause_gameplay()
+				_on_pause_pressed()
 			elif state == State.PAUSED:
-				state = State.PLAYING
-				$Menus/Pause.visible = false
-				_resume_gameplay()
+				_on_resume_pressed()
 
 
 func start_game() -> void:
@@ -49,7 +47,6 @@ func start_game() -> void:
 			new_enemy.destroyed.connect(_on_enemy_destroyed)
 	$Gameplay/Mothership.wait_time = randf_range(MOTHERSHIP_SPAWN_INTERVAL_MIN, MOTHERSHIP_SPAWN_INTERVAL_MAX)
 	$Gameplay/Mothership.start()
-	$Audio/Music.play()
 	var player = PLAYER.instantiate()
 	$Gameplay.add_child(player)
 	player.set_position(Vector2(294, 960))
@@ -132,10 +129,15 @@ func _on_mothership_timeout() -> void:
 	mothership.position.x = 0
 	mothership.position.y = 1.5 * mothership.get_node("Ship").get_rect().size.y
 	mothership.destroyed.connect(_on_mothership_destroyed)
+	mothership.gone.connect(_on_mothership_gone)
 
 
 func _on_mothership_destroyed() -> void:
 	_set_score(score + 500)
+	_on_mothership_gone()
+
+
+func _on_mothership_gone() -> void:
 	$Gameplay/Mothership.wait_time = randf_range(MOTHERSHIP_SPAWN_INTERVAL_MIN, MOTHERSHIP_SPAWN_INTERVAL_MAX)
 	$Gameplay/Mothership.start()
 	_check_win_condition()
@@ -151,25 +153,37 @@ func _on_player_destroyed() -> void:
 
 
 func _on_play_again_pressed() -> void:
+	$Audio/Confirm.play()
 	$Menus/GameOver.visible = false
 	reset_game()
 	start_game()
 
 
 func _on_play_pressed() -> void:
+	$Audio/Confirm.play()
 	$Menus/Main.visible = false
 	start_game()
 
 
+func _on_pause_pressed() -> void:
+	state = State.PAUSED
+	$Audio/Confirm.play()
+	$Menus/Pause.visible = true
+	_pause_gameplay()
+
+
 func _on_resume_pressed() -> void:
 	state = State.PLAYING
+	$Audio/Confirm.play()
 	$Menus/Pause.visible = false
 	_resume_gameplay()
 
 
 func _on_credits_pressed() -> void:
+	$Audio/Confirm.play()
 	$Menus/Credits.visible = true
 
 
 func _on_credits_dismiss_pressed() -> void:
+	$Audio/Confirm.play()
 	$Menus/Credits.visible = false

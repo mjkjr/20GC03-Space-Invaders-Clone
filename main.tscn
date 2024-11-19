@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dfpb6k3ssig7u"]
+[gd_scene load_steps=11 format=3 uid="uid://dfpb6k3ssig7u"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_6cwsn"]
 [ext_resource type="Texture2D" uid="uid://cxfq8h8vbn7f4" path="res://assets/Space_Stars2.png" id="1_wpwr7"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cxghgewfsxxhl" path="res://assets/health-meter.png" id="4_dga0e"]
 [ext_resource type="AudioStream" uid="uid://d4j8qhd617x6j" path="res://assets/audio/JDSherbert - Minigame Music Pack - Corrupted Circuitry.mp3" id="4_ps8y2"]
 [ext_resource type="FontFile" uid="uid://bmxi8trvitgn6" path="res://assets/fonts/orbitron-medium.otf" id="5_byh8p"]
+[ext_resource type="AudioStream" uid="uid://bfhlt2dlqgia8" path="res://assets/audio/SFX_UI_INTERFACE_SC-FI_CONFIRM.wav" id="7_1p7jp"]
 
 [sub_resource type="Theme" id="Theme_3g0rr"]
 Label/font_sizes/font_size = 20
@@ -301,6 +302,9 @@ text = "Dismiss"
 [node name="Music" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("4_ps8y2")
 volume_db = -6.0
+
+[node name="Confirm" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("7_1p7jp")
 
 [connection signal="timeout" from="Gameplay/Mothership" to="." method="_on_mothership_timeout"]
 [connection signal="pressed" from="Menus/Main/CenterContainer/PanelContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
