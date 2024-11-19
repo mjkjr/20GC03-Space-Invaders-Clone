@@ -5,9 +5,10 @@ My game #3 of the [20 Games Challenge](https://20_games_challenge.gitlab.io/).
 
 ## 🖼️ Screenshots
 
-![Screenshot](screenshots/Screenshot.png)
-![Screenshot2](screenshots/Screenshot2.png)
-![Screenshot3](screenshots/Screenshot3.png)
+![Screenshot 1](screenshots/Screenshot-1.png)
+![Screenshot 2](screenshots/Screenshot-2.png)
+![Screenshot 3](screenshots/Screenshot-3.png)
+![Screenshot 4](screenshots/Screenshot-4.png)
 
 ## 🕹️ Play
 
